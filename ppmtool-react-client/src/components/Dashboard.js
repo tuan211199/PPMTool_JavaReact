@@ -1,25 +1,41 @@
-import React from 'react'
-import ProjectItem from './project/ProjectItem';
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { getProjects } from "../actions/projectActions";
+import ProjectItem from "./project/ProjectItem";
 import CreateProjectButton from "./project/CreateProjectButton";
 
-function Dashboard() {
-    return (
-        <div className="projects">
-        <div className="container">
-            <div className="row">
-                <div className="col-md-12">
-                    <h1 className="display-4 text-center">Projects</h1>
-                    <br />
-                    <CreateProjectButton />
-                    <br />
-                    <hr />
+function Dashboard({ getProjects, project: { projects } }) {
+  useEffect(() => {
+    getProjects();
+  }, [getProjects]);
 
-                    <ProjectItem />
-                </div>
-            </div>
+  return (
+    <div className="projects">
+      <div className="container">
+        <div className="row">
+          <div className="col-md-12">
+            <h1 className="display-4 text-center">Projects</h1>
+            <br />
+            <CreateProjectButton />
+            <br />
+            <hr />
+            {projects &&
+              projects.map((prj) => <ProjectItem key={prj.id} project={prj} />)}
+          </div>
         </div>
+      </div>
     </div>
-    )
+  );
 }
 
-export default Dashboard;
+Dashboard.propTypes = {
+  project: PropTypes.object.isRequired,
+  getProjects: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  project: state.project,
+});
+
+export default connect(mapStateToProps, { getProjects })(Dashboard);
