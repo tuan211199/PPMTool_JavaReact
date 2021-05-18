@@ -5,7 +5,7 @@ import { getProjects } from "../actions/projectActions";
 import ProjectItem from "./project/ProjectItem";
 import CreateProjectButton from "./project/CreateProjectButton";
 
-function Dashboard({ getProjects, project: { projects } }) {
+function Dashboard({ getProjects, project: { projects, loading } }) {
   useEffect(() => {
     getProjects();
   }, [getProjects]);
@@ -20,7 +20,7 @@ function Dashboard({ getProjects, project: { projects } }) {
             <CreateProjectButton />
             <br />
             <hr />
-            {projects &&
+            {!loading &&
               projects.map((prj) => <ProjectItem key={prj.id} project={prj} />)}
           </div>
         </div>

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 function ProjectItem({
   project: {
@@ -30,11 +31,11 @@ function ProjectItem({
                   <i className="fa fa-flag-checkered pr-1"> Project Board </i>
                 </li>
               </a>
-              <a href="#">
+              <Link to={`/updateProject/${projectIdentifier}`}>
                 <li className="list-group-item update">
                   <i className="fa fa-edit pr-1"> Update Project Info</i>
                 </li>
-              </a>
+              </Link>
               <a href="">
                 <li className="list-group-item delete">
                   <i className="fa fa-minus-circle pr-1"> Delete Project</i>
