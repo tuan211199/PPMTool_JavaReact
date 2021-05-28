@@ -41,7 +41,7 @@ public class ProjectTaskService {
             projectTask.setProjectSequence(projectIdentifier+"-"+backlogSequence);
             projectTask.setProjectIdentifier(projectIdentifier);
             // initial priority when priority null
-            if(projectTask.getPriority() == null){
+            if(projectTask.getPriority() == null || projectTask.getPriority() == 0){
                 projectTask.setPriority(3);
             }
             // initial status when status is null
