@@ -22,6 +22,12 @@ function ProjectBoard({ getBacklog, backlog: { project_tasks }, errors }) {
             {errors.projectNotFound}
           </div>
         );
+      } else if (errors.projectIdentidier) {
+        return (
+          <div className="alert alert-info text-center" role="alert">
+            {errors.projectIdentidier}
+          </div>
+        );
       } else {
         return (
           <div className="alert alert-info text-center" role="alert">

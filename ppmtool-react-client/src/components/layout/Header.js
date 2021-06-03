@@ -1,42 +1,95 @@
-import React from 'react'
+import React from "react";
+import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { logout } from "../../actions/securityAction";
 
-function Header() {
-    return (
-        // NavBar Component Code 
-        <nav className="navbar navbar-expand-sm navbar-dark bg-primary mb-4">
-            <div className="container">
-                <a className="navbar-brand" href="Dashboard.html">
-                    Personal Project Management Tool
-                </a>
-                <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#mobile-nav">
-                    <span className="navbar-toggler-icon" />
-                </button>
+function Header({ logout, security: { validToken, user } }) {
+  const logoutt = (e) => {
+    e.preventDefault();
+    logout();
+    window.location.href = "/";
+  };
 
-                <div className="collapse navbar-collapse nav-flex" id="mobile-nav">
-                    <ul className="navbar-nav mr-auto">
-                        <li className="nav-item">
-                            <a className="nav-link" href="/dashboard">
-                                Dashboard
-                            </a>
-                        </li>
-                    </ul>
+  const userIsAuthenticated = (
+    <div className="collapse navbar-collapse nav-flex" id="mobile-nav">
+      <ul className="navbar-nav mr-auto">
+        <li className="nav-item">
+          <Link className="nav-link" to="/dashboard">
+            Dashboard
+          </Link>
+        </li>
+      </ul>
 
-                    <ul className="navbar-nav ml-auto">
-                        <li className="nav-item">
-                            <a className="nav-link " href="register.html">
-                                Sign Up
-                            </a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link" href="login.html">
-                                Login
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    )
+      <ul className="navbar-nav ml-auto">
+        <li className="nav-item">
+          <Link className="nav-link " to="/dashboard">
+            <i className="fas fa-user-circle mr-1"></i>
+            {user.fullName}
+          </Link>
+        </li>
+        <li className="nav-item">
+          <Link className="nav-link" to="/logout" onClick={(e) => logoutt(e)}>
+            Logout
+          </Link>
+        </li>
+      </ul>
+    </div>
+  );
+
+  const userIsNotAuthenticated = (
+    <div className="collapse navbar-collapse nav-flex" id="mobile-nav">
+      <ul className="navbar-nav ml-auto">
+        <li className="nav-item">
+          <Link className="nav-link " to="/register">
+            Sign up
+          </Link>
+        </li>
+        <li className="nav-item">
+          <Link className="nav-link" to="/login">
+            Login
+          </Link>
+        </li>
+      </ul>
+    </div>
+  );
+
+  let headerLinks;
+
+  if (validToken && user) {
+    headerLinks = userIsAuthenticated;
+  } else {
+    headerLinks = userIsNotAuthenticated;
+  }
+
+  return (
+    // NavBar Component Code
+    <nav className="navbar navbar-expand-sm navbar-dark bg-primary mb-4">
+      <div className="container">
+        <Link className="navbar-brand" to="/">
+          Personal Project Management Tool
+        </Link>
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#mobile-nav"
+        >
+          <span className="navbar-toggler-icon" />
+        </button>
+        {headerLinks}
+      </div>
+    </nav>
+  );
 }
 
-export default Header;
+Header.propTypes = {
+  security: PropTypes.object.isRequired,
+  logout: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  security: state.security,
+});
+
+export default connect(mapStateToProps, { logout })(Header);
